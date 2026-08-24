@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threads Scraper Bot</title>
+    <meta name="description" content="Advanced Threads scraper with anti-detection and real-time monitoring">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕸️</text></svg>">
+</head>
+<body>
+    <!-- App Shell -->
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10"/>
+                            <path d="M12 8v8M8 12h8"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">ThreadBot</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#/" class="nav-item active" data-page="timeline">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span data-i18n="nav.timeline">Timeline</span>
+                </a>
+                <a href="#/keywords" class="nav-item" data-page="keywords">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="9" x2="20" y2="9"/>
+                        <line x1="4" y1="15" x2="20" y2="15"/>
+                        <line x1="10" y1="3" x2="8" y2="21"/>
+                        <line x1="16" y1="3" x2="14" y2="21"/>
+                    </svg>
+                    <span data-i18n="nav.keywords">Kata Kunci</span>
+                </a>
+                <a href="#/settings" class="nav-item" data-page="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span data-i18n="nav.settings">Pengaturan</span>
+                </a>
+            </nav>
+
+            <!-- Scraper Status Widget -->
+            <div class="sidebar-status">
+                <div class="status-indicator" id="scraper-status-dot">
+                    <span class="status-dot offline"></span>
+                    <span class="status-text" data-i18n="status.stopped">Berhenti</span>
+                </div>
+                <div class="status-actions">
+                    <button class="btn-icon btn-start" id="btn-scraper-toggle" title="Start/Stop Scraper">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Language Toggle -->
+            <div class="sidebar-footer">
+                <button class="lang-toggle" id="lang-toggle" title="Toggle Language">
+                    <span class="lang-flag">🇮🇩</span>
+                    <span class="lang-code">ID</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+                <h1 class="page-title" id="page-title" data-i18n="nav.timeline">Timeline</h1>
+                <div class="topbar-actions">
+                    <div class="stats-mini" id="stats-mini">
+                        <span class="stat-item">
+                            <span class="stat-value" id="stat-total">0</span>
+                            <span class="stat-label" data-i18n="stats.posts">Post</span>
+                        </span>
+                        <span class="stat-divider">|</span>
+                        <span class="stat-item">
+                            <span class="stat-value" id="stat-today">0</span>
+                            <span class="stat-label" data-i18n="stats.today">Hari Ini</span>
+                        </span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Container -->
+            <div class="page-container" id="page-container">
+                <!-- Timeline Page (Default) -->
+                <div class="page active" id="page-timeline">
+                    <!-- Filters -->
+                    <div class="timeline-filters">
+                        <div class="search-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="timeline-search" data-i18n-placeholder="timeline.search_placeholder" placeholder="Cari dalam hasil...">
+                        </div>
+                        <div class="keyword-chips" id="keyword-chips">
+                            <button class="chip active" data-keyword="">
+                                <span data-i18n="timeline.all">Semua</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Feed -->
+                    <div class="timeline-feed" id="timeline-feed">
+                        <!-- Posts will be rendered here -->
+                        <div class="empty-state" id="empty-state">
+                            <div class="empty-icon">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                            </div>
+                            <h3 data-i18n="timeline.empty_title">Belum ada post</h3>
+                            <p data-i18n="timeline.empty_desc">Tambahkan kata kunci dan mulai scraping untuk melihat timeline.</p>
+                        </div>
+                    </div>
+
+                    <!-- Load More -->
+                    <div class="load-more" id="load-more" style="display:none">
+                        <button class="btn btn-outline" id="btn-load-more" data-i18n="timeline.load_more">Muat Lebih Banyak</button>
+                    </div>
+                </div>
+
+                <!-- Keywords Page -->
+                <div class="page" id="page-keywords">
+                    <div class="page-header">
+                        <h2 data-i18n="keywords.title">Manajemen Kata Kunci</h2>
+                        <p class="page-subtitle" data-i18n="keywords.subtitle">Kelola kata kunci yang akan dipantau di Threads.</p>
+                    </div>
+
+                    <!-- Add Keyword Form -->
+                    <div class="card add-keyword-card">
+                        <div class="input-group">
+                            <input type="text" id="new-keyword-input" data-i18n-placeholder="keywords.input_placeholder" placeholder="Masukkan kata kunci baru...">
+                            <button class="btn btn-primary" id="btn-add-keyword">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                <span data-i18n="keywords.add">Tambah</span>
+                            </button>
+                        </div>
+                        <div class="keyword-limit" id="keyword-limit">
+                            <span data-i18n="keywords.limit">Batas</span>: <span id="keyword-count">0</span> / <span id="keyword-max">20</span>
+                        </div>
+                    </div>
+
+                    <!-- Keywords List -->
+                    <div class="keywords-list" id="keywords-list">
+                        <!-- Keywords will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div class="page" id="page-settings">
+                    <div class="page-header">
+                        <h2 data-i18n="settings.title">Pengaturan</h2>
+                    </div>
+
+                    <!-- Login Section -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3 data-i18n="settings.login_title">Akun Threads</h3>
+                            <span class="login-badge" id="login-badge" data-i18n="settings.not_logged_in">Belum Login</span>
+                        </div>
+                        <p class="card-desc" data-i18n="settings.login_desc">Login diperlukan untuk fitur pencarian keyword di Threads.</p>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label data-i18n="settings.username">Username</label>
+                                <input type="text" id="threads-username" placeholder="@username">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="settings.password">Password</label>
+                                <input type="password" id="threads-password" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" id="btn-login" data-i18n="settings.login_btn">Login</button>
+                            <button class="btn btn-outline btn-danger" id="btn-logout" data-i18n="settings.logout_btn">Logout</button>
+                        </div>
+                    </div>
+
+                    <!-- Polling Interval -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3 data-i18n="settings.interval_title">Interval Polling</h3>
+                        </div>
+                        <p class="card-desc" data-i18n="settings.interval_desc">Seberapa sering bot akan memeriksa post baru.</p>
+                        <div class="interval-control">
+                            <input type="range" id="interval-slider" min="30" max="600" step="10" value="120">
+                            <div class="interval-display">
+                                <span id="interval-value">2 menit</span>
+                            </div>
+                            <div class="interval-labels">
+                                <span>30d</span>
+                                <span data-i18n="settings.recommended">⭐ Disarankan: 2m</span>
+                                <span>10m</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-save-interval" data-i18n="settings.save">Simpan</button>
+                    </div>
+
+                    <!-- Proxy Configuration -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3 data-i18n="settings.proxy_title">Konfigurasi Proxy</h3>
+                            <label class="switch">
+                                <input type="checkbox" id="proxy-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <p class="card-desc" data-i18n="settings.proxy_desc">Gunakan proxy untuk rotasi IP dan menghindari deteksi.</p>
+                        <div class="form-group" id="proxy-config" style="display:none">
+                            <label data-i18n="settings.proxy_list">Daftar Proxy (satu per baris)</label>
+                            <textarea id="proxy-list" rows="4" placeholder="http://user:pass@proxy1.com:8080&#10;socks5://proxy2.com:1080"></textarea>
+                            <button class="btn btn-primary mt-2" id="btn-save-proxy" data-i18n="settings.save">Simpan</button>
+                        </div>
+                        <div class="proxy-stats" id="proxy-stats">
+                            <span class="stat-badge" id="proxy-count">0 proxy</span>
+                            <span class="stat-badge" id="proxy-healthy">0 healthy</span>
+                        </div>
+                    </div>
+
+                    <!-- CAPTCHA Configuration -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3 data-i18n="settings.captcha_title">CAPTCHA Solver</h3>
+                        </div>
+                        <p class="card-desc" data-i18n="settings.captcha_desc">Konfigurasi solver CAPTCHA otomatis (opsional).</p>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label data-i18n="settings.captcha_service">Service</label>
+                                <select id="captcha-service">
+                                    <option value="">Disabled</option>
+                                    <option value="2captcha">2Captcha</option>
+                                    <option value="anticaptcha">Anti-Captcha</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <input type="password" id="captcha-api-key" placeholder="API Key">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-save-captcha" data-i18n="settings.save">Simpan</button>
+                    </div>
+
+                    <!-- Export Data -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3 data-i18n="settings.export_title">Ekspor Data</h3>
+                        </div>
+                        <p class="card-desc" data-i18n="settings.export_desc">Download semua data scraping.</p>
+                        <div class="card-actions">
+                            <button class="btn btn-outline" id="btn-export-json">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export JSON
+                            </button>
+                            <button class="btn btn-outline" id="btn-export-csv">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scraper Logs -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3 data-i18n="settings.logs_title">Log Scraper</h3>
+                            <button class="btn-icon" id="btn-refresh-logs" title="Refresh">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="logs-container" id="logs-container">
+                            <div class="log-empty" data-i18n="settings.logs_empty">Belum ada log.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="/js/i18n.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/timeline.js"></script>
+    <script src="/js/keywords.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  threads-scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: threads-scraper-bot
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Jakarta
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

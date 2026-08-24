@@ -1,0 +1,34 @@
+# Core
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-dotenv==1.0.1
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+aiosqlite==0.20.0
+
+# Scraping
+playwright==1.49.1
+playwright-stealth==1.0.6
+curl-cffi==0.7.4
+fake-useragent==2.0.3
+beautifulsoup4==4.12.3
+lxml==5.3.0
+jmespath==1.0.1
+nested-lookup==0.2.25
+
+# Scheduling
+apscheduler==3.10.4
+
+# Security
+cryptography==44.0.0
+
+# Proxy
+aiohttp==3.11.11
+aiohttp-socks==0.9.0
+
+# Utilities
+loguru==0.7.3
+httpx==0.28.1
