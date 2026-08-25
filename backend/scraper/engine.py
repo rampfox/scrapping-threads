@@ -130,7 +130,6 @@ class ScraperEngine:
             locale="id-ID",
             timezone_id=profile.timezone,
             proxy=proxy_config,
-            extra_http_headers=profile.get_browser_headers(),
             ignore_https_errors=True,
         )
 
