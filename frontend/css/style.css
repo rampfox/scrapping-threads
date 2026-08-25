@@ -1241,6 +1241,119 @@ body {
 .text-muted { color: var(--text-muted); }
 .hidden { display: none !important; }
 
+/* --- Login Error Banner --- */
+.login-error-banner {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--danger-bg);
+    border: 1px solid rgba(255, 71, 87, 0.3);
+    border-radius: var(--radius-md);
+    animation: fadeIn 0.3s ease;
+}
+
+.login-error-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.login-error-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.login-error-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--danger);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.login-error-msg {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-family: var(--font-mono);
+    word-break: break-word;
+}
+
+/* --- Debug Console --- */
+.debug-toolbar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.debug-filter-btn {
+    padding: 4px 12px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.debug-filter-btn:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.debug-filter-btn.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.debug-filter-btn[data-level="error"].active {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.debug-filter-btn[data-level="warning"].active {
+    background: var(--warning);
+    border-color: var(--warning);
+    color: #000;
+}
+
+.debug-filter-btn[data-level="info"].active {
+    background: var(--info);
+    border-color: var(--info);
+    color: #000;
+}
+
+.debug-console {
+    max-height: 400px;
+    font-size: 0.76rem;
+}
+
+.debug-console .log-entry {
+    padding: 3px 0;
+    align-items: flex-start;
+}
+
+.debug-console .log-message {
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.log-entry[data-level="error"] .log-level { color: var(--danger); }
+.log-entry[data-level="warning"] .log-level { color: var(--warning); }
+.log-entry[data-level="info"] .log-level { color: var(--info); }
+
+.log-entry.hidden-by-filter {
+    display: none;
+}
+
 /* --- Responsive --- */
 @media (max-width: 768px) {
     .sidebar {

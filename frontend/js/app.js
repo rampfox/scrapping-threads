@@ -17,6 +17,7 @@ const App = {
         Keywords.init();
         Settings.init();
         Auth.init();
+        DebugConsole.init();
 
         // Setup routing
         this.setupRouter();
@@ -82,13 +83,16 @@ const App = {
         switch (page) {
             case 'timeline':
                 Timeline.load(true);
+                DebugConsole.stopAutoRefresh();
                 break;
             case 'keywords':
                 Keywords.load();
+                DebugConsole.stopAutoRefresh();
                 break;
             case 'settings':
                 Settings.load();
                 Auth.load();
+                DebugConsole.startAutoRefresh();
                 break;
         }
 

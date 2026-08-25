@@ -218,6 +218,14 @@
                             <button class="btn btn-primary" id="btn-login" data-i18n="settings.login_btn">Login</button>
                             <button class="btn btn-outline btn-danger" id="btn-logout" data-i18n="settings.logout_btn">Logout</button>
                         </div>
+                        <!-- Login Error Banner -->
+                        <div class="login-error-banner" id="login-error-banner" style="display:none">
+                            <div class="login-error-icon">⚠️</div>
+                            <div class="login-error-body">
+                                <div class="login-error-title">Detail Error Login</div>
+                                <div class="login-error-msg" id="login-error-msg"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Polling Interval -->
@@ -325,6 +333,37 @@
                             <div class="log-empty" data-i18n="settings.logs_empty">Belum ada log.</div>
                         </div>
                     </div>
+
+                    <!-- Debug Console -->
+                    <div class="card settings-card">
+                        <div class="card-header">
+                            <h3>🖥️ Debug Console</h3>
+                            <div style="display:flex;gap:6px">
+                                <button class="btn-icon" id="btn-refresh-debug" title="Refresh">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 4 23 10 17 10"/>
+                                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                    </svg>
+                                </button>
+                                <button class="btn-icon" id="btn-clear-debug" title="Clear">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="card-desc">Log detail dari proses login dan scraping. Berguna untuk debug saat login gagal.</p>
+                        <div class="debug-toolbar">
+                            <button class="debug-filter-btn active" data-level="all">Semua</button>
+                            <button class="debug-filter-btn" data-level="error">Error</button>
+                            <button class="debug-filter-btn" data-level="warning">Warning</button>
+                            <button class="debug-filter-btn" data-level="info">Info</button>
+                        </div>
+                        <div class="logs-container debug-console" id="debug-console">
+                            <div class="log-empty">Belum ada log debug. Coba lakukan login untuk melihat detail prosesnya.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -337,6 +376,7 @@
     <script src="/js/i18n.js"></script>
     <script src="/js/utils.js"></script>
     <script src="/js/api.js"></script>
+    <script src="/js/debug.js"></script>
     <script src="/js/timeline.js"></script>
     <script src="/js/keywords.js"></script>
     <script src="/js/settings.js"></script>

@@ -34,6 +34,7 @@ async def get_auth_status(db: AsyncSession = Depends(get_db)):
                 "status": acc.login_status,
                 "last_login": acc.last_login.isoformat() if acc.last_login else None,
                 "has_cookies": acc.cookies_json is not None,
+                "error": session_manager.get_login_error(acc.username),
             }
             for acc in accounts
         ],
@@ -57,6 +58,14 @@ async def login_threads(data: LoginRequest, db: AsyncSession = Depends(get_db)):
 
     # Perform login
     result = await scraper_engine.login_threads(data.username, data.password)
+
+    # Tambahkan detail error dari session_manager jika ada
+    login_error = session_manager.get_login_error(data.username)
+    if login_error and not result.get("success"):
+        result["error_detail"] = login_error
+        # Tambahkan ke message jika belum ada
+        if login_error not in result.get("message", ""):
+            result["message"] = f"{result.get('message', 'Login gagal')} — {login_error}"
 
     # Save/update account in DB
     existing = await db.execute(
