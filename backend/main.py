@@ -102,6 +102,10 @@ async def health_check():
 
 
 # Serve frontend
+import os
+for folder in ["frontend/assets", "frontend/css", "frontend/js"]:
+    os.makedirs(folder, exist_ok=True)
+
 app.mount("/assets", StaticFiles(directory="frontend/assets"), name="assets")
 app.mount("/css", StaticFiles(directory="frontend/css"), name="css")
 app.mount("/js", StaticFiles(directory="frontend/js"), name="js")
