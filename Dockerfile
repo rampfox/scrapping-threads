@@ -4,24 +4,21 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-# Skip playwright's built-in dependency installer (kita install manual)
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
 
 WORKDIR /app
 
-# Install semua system dependency Chromium secara manual
-# (playwright --with-deps gagal di Debian Trixie karena rename package font)
+# Install system dependency Chromium
+# Catatan: font packages (ttf-ubuntu-font-family, fonts-ubuntu) TIDAK tersedia
+# di Debian Trixie — kita skip dan hanya install yang benar-benar dibutuhkan
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Networking & certs
     ca-certificates \
     wget \
     gnupg \
-    # Fonts - nama baru di Debian Trixie (bukan ttf-unifont / ttf-ubuntu-font-family)
+    # Fonts yang tersedia di Trixie (cukup untuk rendering headless)
     fonts-liberation \
-    fonts-unifont \
-    fonts-ubuntu \
     fonts-noto-color-emoji \
-    # Chromium system libs
+    # Core Chromium libs
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcups2 \
@@ -39,16 +36,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxss1 \
     libxtst6 \
     xdg-utils \
-    # Audio - nama baru di Debian Trixie (bukan libasound2)
-    libasound2t64 \
     # Pango / rendering
     libpango-1.0-0 \
     libpangocairo-1.0-0 \
     libxshmfence1 \
-    # Tambahan yang dibutuhkan Chromium headless
+    # Graphics
     libvulkan1 \
     libegl1 \
     libgl1 \
+    && rm -rf /var/lib/apt/lists/* \
+    # Install audio lib — nama berbeda di Trixie, coba keduanya
+    ; apt-get update \
+    && (apt-get install -y --no-install-recommends libasound2t64 \
+        || apt-get install -y --no-install-recommends libasound2) \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -56,7 +56,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Playwright Chromium TANPA --with-deps
-# (dependency sudah diinstall manual di atas)
+# (semua dependency sudah diinstall manual di atas)
 RUN playwright install chromium
 
 # Copy application code
